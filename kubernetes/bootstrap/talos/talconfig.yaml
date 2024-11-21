@@ -27,7 +27,7 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: "mini-blue"
+  - hostname: "mini-blue.talos.boxoft.in"
     ipAddress: "10.1.10.10"
     installDisk: "/dev/nvme0n1"
     talosImageURL: factory.talos.dev/installer/33f22b0af28f1073fc902af64276b6aa0be45028e0e0c008a411b6dab5883c05
@@ -44,7 +44,7 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.1.10.9"
-  - hostname: "mini-green"
+  - hostname: "mini-green.talos.boxoft.in"
     ipAddress: "10.1.10.11"
     installDisk: "/dev/nvme0n1"
     talosImageURL: factory.talos.dev/installer/33f22b0af28f1073fc902af64276b6aa0be45028e0e0c008a411b6dab5883c05
@@ -61,7 +61,7 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.1.10.9"
-  - hostname: "mini-red"
+  - hostname: "mini-red.talos.boxoft.in"
     ipAddress: "10.1.10.12"
     installDisk: "/dev/nvme0n1"
     talosImageURL: factory.talos.dev/installer/33f22b0af28f1073fc902af64276b6aa0be45028e0e0c008a411b6dab5883c05
