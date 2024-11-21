@@ -1,0 +1,101 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+---
+# renovate: datasource=docker depName=ghcr.io/siderolabs/installer
+talosVersion: v1.8.3
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.31.2
+
+clusterName: "minis"
+endpoint: https://10.1.10.9:6443
+
+clusterPodNets:
+  - "10.222.0.0/16"
+clusterSvcNets:
+  - "10.233.0.0/16"
+
+additionalApiServerCertSans: &sans
+  - "10.1.10.9"
+  - "kube.talos.boxoft.in"
+  - "kube.boxoft.in"
+  - "kubeapi.boxoft.in"
+  - "kube-api.boxoft.in"
+  - "127.0.0.1"
+additionalMachineCertSans: *sans
+
+# Disable built-in Flannel to use Cilium
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: "mini-blue"
+    ipAddress: "10.1.10.10"
+    installDisk: "/dev/nvme0n1"
+    talosImageURL: factory.talos.dev/installer/33f22b0af28f1073fc902af64276b6aa0be45028e0e0c008a411b6dab5883c05
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "6c:2b:59:fa:fe:eb"
+        dhcp: false
+        addresses:
+          - "10.1.10.10/24"
+        routes:
+          - network: 0.0.0.0/0
+            gateway: "10.1.10.1"
+        mtu: 1500
+        vip:
+          ip: "10.1.10.9"
+  - hostname: "mini-green"
+    ipAddress: "10.1.10.11"
+    installDisk: "/dev/nvme0n1"
+    talosImageURL: factory.talos.dev/installer/33f22b0af28f1073fc902af64276b6aa0be45028e0e0c008a411b6dab5883c05
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "b8:85:84:a4:74:1c"
+        dhcp: false
+        addresses:
+          - "10.1.10.11/24"
+        routes:
+          - network: 0.0.0.0/0
+            gateway: "10.1.10.1"
+        mtu: 1500
+        vip:
+          ip: "10.1.10.9"
+  - hostname: "mini-red"
+    ipAddress: "10.1.10.12"
+    installDisk: "/dev/nvme0n1"
+    talosImageURL: factory.talos.dev/installer/33f22b0af28f1073fc902af64276b6aa0be45028e0e0c008a411b6dab5883c05
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "b8:85:84:a4:7c:fe"
+        dhcp: false
+        addresses:
+          - "10.1.10.12/24"
+        routes:
+          - network: 0.0.0.0/0
+            gateway: "10.1.10.1"
+        mtu: 1500
+        vip:
+          ip: "10.1.10.9"
+
+# Global patches
+patches:
+  - "@./patches/global/cluster-discovery.yaml"
+  - "@./patches/global/containerd.yaml"
+  - "@./patches/global/disable-search-domain.yaml"
+  - "@./patches/global/dns.yaml"
+  - "@./patches/global/hostdns.yaml"
+  - "@./patches/global/kubelet.yaml"
+  - "@./patches/global/ntp.yaml"
+  - "@./patches/global/openebs-local.yaml"
+  - "@./patches/global/sysctl.yaml"
+
+# Controller patches
+controlPlane:
+  patches:
+    - "@./patches/controller/api-access.yaml"
+    - "@./patches/controller/cluster.yaml"
+    - "@./patches/controller/disable-admission-controller.yaml"
+    - "@./patches/controller/etcd.yaml"
+

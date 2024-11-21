@@ -1,0 +1,3 @@
+---
+providerRegex: ^(mini-blue|mini-green|mini-red)$
+bypassDnsResolution: true
