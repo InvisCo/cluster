@@ -44,7 +44,7 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.1.10.9"
-    extensionServices:
+    extensionServices: &exts
       - name: nut-client
         configFiles:
           - content: |-
@@ -71,16 +71,7 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.1.10.9"
-    extensionServices:
-      - name: nut-client
-        configFiles:
-          - content: |-
-              MONITOR ups@10.1.10.99 1 upsmon boxoftin secondary
-              SHUTDOWNCMD "/sbin/poweroff"
-            mountPath: /usr/local/etc/nut/upsmon.conf
-      - name: tailscale
-        environment:
-          - TS_AUTHKEY=tskey-auth-XXXXX
+    extensionServices: *exts
   - hostname: "mini-red"
     ipAddress: "10.1.10.12"
     installDisk: "/dev/nvme0n1"
@@ -98,16 +89,7 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.1.10.9"
-    extensionServices:
-      - name: nut-client
-        configFiles:
-          - content: |-
-              MONITOR ups@10.1.10.99 1 upsmon boxoftin secondary
-              SHUTDOWNCMD "/sbin/poweroff"
-            mountPath: /usr/local/etc/nut/upsmon.conf
-      - name: tailscale
-        environment:
-          - TS_AUTHKEY=tskey-auth-XXXXX
+    extensionServices: *exts
 
 # Global patches
 patches:
