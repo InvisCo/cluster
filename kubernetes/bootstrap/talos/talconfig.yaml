@@ -16,9 +16,9 @@ clusterSvcNets:
 additionalApiServerCertSans: &sans
   - "10.1.10.9"
   - "kube.talos.boxoft.in"
-  - "kube.boxoft.in"
-  - "kubeapi.boxoft.in"
-  - "kube-api.boxoft.in"
+  - "100.114.134.37"
+  - "100.85.109.114"
+  - "100.125.97.85"
   - "127.0.0.1"
 additionalMachineCertSans: *sans
 
@@ -27,7 +27,7 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: "mini-blue.talos.boxoft.in"
+  - hostname: "mini-blue"
     ipAddress: "10.1.10.10"
     installDisk: "/dev/nvme0n1"
     talosImageURL: factory.talos.dev/installer/33f22b0af28f1073fc902af64276b6aa0be45028e0e0c008a411b6dab5883c05
@@ -44,7 +44,17 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.1.10.9"
-  - hostname: "mini-green.talos.boxoft.in"
+    extensionServices:
+      - name: nut-client
+        configFiles:
+          - content: |-
+              MONITOR ups@10.1.10.99 1 upsmon boxoftin secondary
+              SHUTDOWNCMD "/sbin/poweroff"
+            mountPath: /usr/local/etc/nut/upsmon.conf
+      - name: tailscale
+        environment:
+          - TS_AUTHKEY=tskey-auth-XXXXX
+  - hostname: "mini-green"
     ipAddress: "10.1.10.11"
     installDisk: "/dev/nvme0n1"
     talosImageURL: factory.talos.dev/installer/33f22b0af28f1073fc902af64276b6aa0be45028e0e0c008a411b6dab5883c05
@@ -61,7 +71,17 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.1.10.9"
-  - hostname: "mini-red.talos.boxoft.in"
+    extensionServices:
+      - name: nut-client
+        configFiles:
+          - content: |-
+              MONITOR ups@10.1.10.99 1 upsmon boxoftin secondary
+              SHUTDOWNCMD "/sbin/poweroff"
+            mountPath: /usr/local/etc/nut/upsmon.conf
+      - name: tailscale
+        environment:
+          - TS_AUTHKEY=tskey-auth-XXXXX
+  - hostname: "mini-red"
     ipAddress: "10.1.10.12"
     installDisk: "/dev/nvme0n1"
     talosImageURL: factory.talos.dev/installer/33f22b0af28f1073fc902af64276b6aa0be45028e0e0c008a411b6dab5883c05
@@ -78,6 +98,16 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.1.10.9"
+    extensionServices:
+      - name: nut-client
+        configFiles:
+          - content: |-
+              MONITOR ups@10.1.10.99 1 upsmon boxoftin secondary
+              SHUTDOWNCMD "/sbin/poweroff"
+            mountPath: /usr/local/etc/nut/upsmon.conf
+      - name: tailscale
+        environment:
+          - TS_AUTHKEY=tskey-auth-XXXXX
 
 # Global patches
 patches:
